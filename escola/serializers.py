@@ -51,3 +51,18 @@ class ListaMatriculasCursoSerialaizer(serializers.ModelSerializer):
     class Meta:
         model = Matricula
         fields = ['estudante_nome']
+
+
+class EstudanteSerializerV2(serializers.ModelSerializer):
+    class Meta:
+        model = Estudante
+        fields = ['id', 'nome', 'email', 'celular']
+
+    def validate(self, dados):
+        if nome_invalido(dados['nome']):
+            raise serializers.ValidationError(
+                {'nome': 'P nome só pode ter letras'})
+        if celular_invalido(dados['celular']):
+            raise serializers.ValidationError(
+                {'celular': 'O celular precisa seguir o modelo: 86 99999-9999 (respeitando traços e espaços)!'})
+        return dados
